@@ -5,10 +5,12 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"sync"
 	"syscall"
 	"time"
@@ -49,6 +51,10 @@ type SingleResponse struct {
 	PingValue     bool    `json:"ping"`
 	UploadValue   float32 `json:"upload"`
 	DownloadValue float32 `json:"download"`
+}
+
+type IndexTemplateData struct {
+	Commit string
 }
 
 const pingInterval = 30 * time.Second
@@ -170,7 +176,7 @@ func runPeriodicSpeedtest(ctx context.Context, wg *sync.WaitGroup, speedChannel 
 }
 
 func initDatabase() (*sql.DB, error) {
-	db, err := sql.Open("sqlite", "./network.db")
+	db, err := sql.Open("sqlite", "./ping_graph.db")
 	if err != nil {
 		return nil, err
 	}
@@ -220,6 +226,19 @@ func saveNetworkInfoToDatabase(db *sql.DB, info *NetworkInfo) {
 }
 
 func main() {
+	if len(os.Args) != 2 {
+		log.Println("Usage:")
+		log.Println("\tping_graph /path/to/static")
+		return
+	}
+
+	assetsPath, _ := filepath.Abs(os.Args[1])
+	if _, err := os.Stat(assetsPath); errors.Is(err, os.ErrNotExist) {
+		log.Printf("Provided static assets path doesn't exist: %s\n", assetsPath)
+	}
+
+	log.Printf("ping_graph (%s) (%s)\n", assetsPath, Commit)
+
 	port := ":8080"
 	server := &http.Server{Addr: port}
 
@@ -240,8 +259,24 @@ func main() {
 	go runPeriodicSpeedtest(routineContext, &waitGroup, speedChannel)
 	go clientPool.start(routineContext, &waitGroup)
 
-	// Serve static files
-	http.Handle("/", http.FileServer(http.Dir("../static")))
+	// /static
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(filepath.Join(assetsPath, "static")))))
+
+	// /
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		t, err := template.ParseFiles(filepath.Join(assetsPath, "templates", "index.html"))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		data := IndexTemplateData{Commit: Commit}
+		err = t.Execute(w, data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	})
 
 	// /batch
 	http.HandleFunc("/batch", func(w http.ResponseWriter, r *http.Request) {
@@ -255,7 +290,7 @@ func main() {
 		`, startTime)
 
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -283,7 +318,7 @@ func main() {
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 

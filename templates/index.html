@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="uPlot.min.css">
-    <script src="uPlot.iife.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/uPlot.min.css">
+    <script src="/static/js/uPlot.iife.min.js"></script>
 </head>
 <body>
     <div class="main_container">
@@ -49,7 +49,8 @@
                 </table>
             </div>
         </div>
+        <div id="commit_container">{{ .Commit }}</div>
     </div>
-    <script src="./script.js" type="module"></script>
+    <script src="/static/js/script.js" type="module"></script>
 </body>
 </html>

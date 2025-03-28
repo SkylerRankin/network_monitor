@@ -92,3 +92,9 @@
 .hidden {
     display: none;
 }
+
+#commit_container {
+    margin-top: 40px;
+    font-size: 11px;
+    color: rgb(190, 190, 190);
+}

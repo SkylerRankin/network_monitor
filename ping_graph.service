@@ -1,0 +1,13 @@
+[Unit]
+Description=Ping Graph, a network monitor
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+ExecStart=/usr/local/bin/ping_graph /srv/ping_graph/static
+
+[Install]
+WantedBy=multi-user.target
