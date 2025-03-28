@@ -1,0 +1,6 @@
+# VSCode
+.vscode
+
+# Build artifacts
+*.exe
+*.db

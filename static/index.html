@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="uPlot.min.css">
+    <script src="uPlot.iife.min.js"></script>
+</head>
+<body>
+    <div class="main_container">
+        <h1>Network monitor<span class="title_connected_container"><span id="title_connected_circle" class="dot red_dot"></span><span id="title_active_text">Not connected</span></span></h1>
+        <div id="chart"></div>
+        <div style="text-align: center; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <div id="legend_text" class="hidden">
+                <span id="legend_date"></span> <span id="legend_time"></span> - <span id="legend_down"></span> / <span id="legend_up"></span>, <span id="legend_ping_text">ping <span id="legend_ping"></span></span>
+            </div>
+        </div>
+        <div class="summary_container">
+            <div class="summary_section">
+                <div class="summary_title">Latest datapoint</div>
+                <div><span id="latest_date">sd</span> <span id="latest_time">asd</span></div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Download</td>
+                            <td><span id="latest_down">24</span> Mbps</td>
+                        </tr>
+                        <tr>
+                            <td>Upload</td>
+                            <td><span id="latest_up">34</span> Mbps</td>
+                        </tr>
+                        <tr>
+                            <td>Ping</td>
+                            <td>
+                                <span id="latest_ping_circle" class="dot"></span>
+                                <span id="latest_ping_text">Success</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="summary_section">
+                <div class="summary_title">Recent issues</div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>None</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="./script.js" type="module"></script>
+</body>
+</html>
