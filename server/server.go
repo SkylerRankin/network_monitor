@@ -175,8 +175,8 @@ func runPeriodicSpeedtest(ctx context.Context, wg *sync.WaitGroup, speedChannel 
 	}
 }
 
-func initDatabase() (*sql.DB, error) {
-	db, err := sql.Open("sqlite", "./ping_graph.db")
+func initDatabase(assetsPath string) (*sql.DB, error) {
+	db, err := sql.Open("sqlite", filepath.Join(assetsPath, "ping_graph.db"))
 	if err != nil {
 		return nil, err
 	}
@@ -242,7 +242,7 @@ func main() {
 	port := ":8080"
 	server := &http.Server{Addr: port}
 
-	db, err := initDatabase()
+	db, err := initDatabase(assetsPath)
 	if err != nil {
 		log.Printf("Failed to initialize database: %s\n", err)
 		return
