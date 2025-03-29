@@ -19,8 +19,9 @@ else
 fi
 
 rm -rf /srv/ping_graph
-mkdir -p /srv/ping_graph/static
+mkdir -p /srv/ping_graph/
 cp -r ./static/ /srv/ping_graph/
+cp -r ./templates/ /srv/ping_graph/
 
 install_dir="/usr/local/bin"
 mkdir -p $install_dir

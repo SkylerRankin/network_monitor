@@ -7,7 +7,7 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=10
-ExecStart=/usr/local/bin/ping_graph /srv/ping_graph/static
+ExecStart=/usr/local/bin/ping_graph /srv/ping_graph/
 
 [Install]
 WantedBy=multi-user.target
