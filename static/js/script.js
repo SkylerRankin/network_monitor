@@ -114,7 +114,6 @@ const chartOptions = {
         show: false,
     },
     hooks: {
-        setSeries: [ (u, seriesIdx) => console.log('setSeries', seriesIdx) ],
         setLegend: [ u => updateLegend(u) ],
     },
     cursor: {
@@ -205,8 +204,8 @@ const loadInitialData = async () => {
 
     const json = await res.json();
     chart.data[0] = json["timestamps"];
-    chart.data[1] = json["download"].map(x => x === 0 ? undefined : x);
-    chart.data[2] = json["upload"].map(x => x === 0 ? undefined : x);
+    chart.data[1] = json["download"].map(x => x === null ? undefined : x);
+    chart.data[2] = json["upload"].map(x => x === null ? undefined : x);
     chart.data[3] = json["ping"].map(getPingValue);
 
     if (chart.data[0].length > maxDataPoints) {
@@ -247,10 +246,10 @@ const connectToWebSocket = () => {
 
     socket.onmessage = event => {
         const info = JSON.parse(event.data);
-        chart.data[0].push(info["timestamp"]);
-        chart.data[1].push(info["download"] === -1 ? undefined : info["download"]);
-        chart.data[2].push(info["upload"] === -1 ? undefined : info["upload"]);
-        chart.data[3].push(getPingValue(info["ping"]));
+        chart.data[0].push(info["timestamps"][0]);
+        chart.data[1].push(info["download"][0] === null ? undefined : info["download"]);
+        chart.data[2].push(info["upload"][0] === null ? undefined : info["upload"]);
+        chart.data[3].push(getPingValue(info["ping"][0]));
 
         if (chart.data[0].length > maxDataPoints) {
             for (let i = 0; i < chart.data.length; i++) {
@@ -260,7 +259,6 @@ const connectToWebSocket = () => {
 
         chart.setData(chart.data);
         updateLatestSummary();
-        console.log(info);
     }
 };
 

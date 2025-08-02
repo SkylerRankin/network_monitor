@@ -6,6 +6,16 @@ A simple web app that displays a real-time graph of ping and network speed data.
 
 The server pings a few highly available DNS servers (Google, OpenDNS, and Cloudflare) for ping information, and uses a Go API for speedtest.net to get download/upload speed information.
 
+## Build and run
+```
+make build
+make run
+```
+
+## Install as systemd service on Ubuntu
+
+TODO: update from makefile
+
 Install / uninstall as systemd service:
 ```
 build_install.sh
