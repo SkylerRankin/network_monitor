@@ -1,15 +1,11 @@
 package constants
 
 import (
-	"time"
-
 	"github.com/SkylerRankin/network_monitor/internal/types"
 )
 
 const (
-	PingInterval      = 30 * time.Second
-	SpeedtestInterval = 15 * time.Minute
-	BytesToMbps       = (1.0 / 125000.0)
+	BytesToMbps = (1.0 / 125000.0)
 )
 
 var PingConfigs = []types.PingConfig{

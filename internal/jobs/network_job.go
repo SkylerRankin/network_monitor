@@ -17,9 +17,9 @@ import (
 
 const (
 	// Time between each call to the network info job.
-	NetworkJobInterval = 5 * time.Second
+	NetworkJobInterval = 30 * time.Second
 	// Ratio of all network info jobs to network info jobs that also do the speed test.
-	speedInterval = 5
+	speedInterval = 30
 )
 
 type networkInfoJob struct {

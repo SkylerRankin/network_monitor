@@ -1,5 +1,5 @@
 [Unit]
-Description=Ping Graph, a network monitor
+Description=A network monitor
 After=network.target
 StartLimitIntervalSec=0
 
@@ -7,7 +7,7 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=10
-ExecStart=/usr/local/bin/ping_graph /srv/ping_graph/
+ExecStart=/usr/local/bin/netmon /srv/netmon/static
 
 [Install]
 WantedBy=multi-user.target
